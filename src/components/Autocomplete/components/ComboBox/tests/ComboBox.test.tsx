@@ -499,6 +499,61 @@ describe('<ComboBox/>', () => {
       };
     });
   });
+
+  describe('empty state', () => {
+    const EmptyState = () => <div>No results</div>;
+
+    function renderEmptyState() {
+      return <EmptyState />;
+    }
+
+    it('renders an empty state when no options are passed in', () => {
+      const comboBox = mountWithAppProvider(
+        <ComboBox
+          options={[]}
+          selected={[]}
+          textField={renderTextField()}
+          onSelect={noop}
+          renderEmptyState={renderEmptyState}
+        />,
+      );
+
+      comboBox.simulate('click');
+      expect(comboBox.find(EmptyState).exists()).toBe(true);
+    });
+
+    it('does not render empty state if actionsBefore exist', () => {
+      const comboBox = mountWithAppProvider(
+        <ComboBox
+          options={[]}
+          selected={[]}
+          textField={renderTextField()}
+          onSelect={noop}
+          actionsBefore={[{image: '../image/path', role: 'option'}]}
+          renderEmptyState={renderEmptyState}
+        />,
+      );
+
+      comboBox.simulate('click');
+      expect(comboBox.find(EmptyState).exists()).toBe(false);
+    });
+
+    it('does not render empty state if actionsAfter exist', () => {
+      const comboBox = mountWithAppProvider(
+        <ComboBox
+          options={[]}
+          selected={[]}
+          textField={renderTextField()}
+          onSelect={noop}
+          actionsAfter={[{image: '../image/path', role: 'option'}]}
+          renderEmptyState={renderEmptyState}
+        />,
+      );
+
+      comboBox.simulate('click');
+      expect(comboBox.find(EmptyState).exists()).toBe(false);
+    });
+  });
 });
 
 function renderTextField() {
