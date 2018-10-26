@@ -24,25 +24,48 @@ describe('<List />', () => {
   });
 
   describe('focusIndex', () => {
-    it('passes focusIndex to correct Item', () => {
+    it('does not pass focusIndex to last Item', () => {
       const focusIndex = 1;
       const list = mountWithAppProvider(
         <List {...mockProps} focusIndex={focusIndex} />,
       );
       const items = list.find(Item);
       expect(items.first().prop('focused')).toBe(false);
+    });
+
+    it('passes focusIndex to first Item', () => {
+      const focusIndex = 1;
+      const list = mountWithAppProvider(
+        <List {...mockProps} focusIndex={focusIndex} />,
+      );
+      const items = list.find(Item);
       expect(items.last().prop('focused')).toBe(true);
     });
   });
 
   describe('disclosureTabs', () => {
+    const disclosureTabs = [
+      {
+        id: 'repeat-customers',
+        content: 'Repeat customers',
+      },
+      {
+        id: 'prospects',
+        content: 'Prospects',
+      },
+    ];
+
     it('renders a button for each item in disclosureTabs', () => {
-      const list = mountWithAppProvider(<List {...mockProps} />);
+      const list = mountWithAppProvider(
+        <List {...mockProps} disclosureTabs={disclosureTabs} />,
+      );
       expect(list.find('button')).toHaveLength(2);
     });
 
     it('passes the id to the button', () => {
-      const list = mountWithAppProvider(<List {...mockProps} />);
+      const list = mountWithAppProvider(
+        <List {...mockProps} disclosureTabs={disclosureTabs} />,
+      );
       expect(
         list
           .find('button')
@@ -53,13 +76,28 @@ describe('<List />', () => {
   });
 
   describe('<Item />', () => {
+    const disclosureTabs = [
+      {
+        id: 'repeat-customers',
+        content: 'Repeat customers',
+      },
+      {
+        id: 'prospects',
+        content: 'Prospects',
+      },
+    ];
+
     it('renders an Item for each item in disclosureTabs', () => {
-      const list = mountWithAppProvider(<List {...mockProps} />);
+      const list = mountWithAppProvider(
+        <List {...mockProps} disclosureTabs={disclosureTabs} />,
+      );
       expect(list.find(Item)).toHaveLength(2);
     });
 
     it('renders the correct content', () => {
-      const list = mountWithAppProvider(<List {...mockProps} />);
+      const list = mountWithAppProvider(
+        <List {...mockProps} disclosureTabs={disclosureTabs} />,
+      );
       const firstItem = list.find(Item).first();
       expect(firstItem.contains('Repeat customers')).toBe(true);
     });

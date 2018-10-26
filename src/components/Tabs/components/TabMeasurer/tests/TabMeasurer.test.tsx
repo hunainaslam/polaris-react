@@ -25,10 +25,21 @@ describe('<TabMeasurer />', () => {
   };
 
   describe('tabToFocus', () => {
-    it('is used to determine correct focused value of Tab', () => {
-      const tabMeasurer = mountWithAppProvider(<TabMeasurer {...mockProps} />);
+    const tabToFocus = 0;
+
+    it('passes focused value of 0 to Tab', () => {
+      const tabMeasurer = mountWithAppProvider(
+        <TabMeasurer {...mockProps} tabToFocus={tabToFocus} />,
+      );
       const tabs = tabMeasurer.find(Tab);
       expect(tabs.first().prop('focused')).toBe(true);
+    });
+
+    it('does not pass wrong focused value to Tab', () => {
+      const tabMeasurer = mountWithAppProvider(
+        <TabMeasurer {...mockProps} tabToFocus={tabToFocus} />,
+      );
+      const tabs = tabMeasurer.find(Tab);
       expect(tabs.last().prop('focused')).toBe(false);
     });
   });

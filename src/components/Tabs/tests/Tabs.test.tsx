@@ -372,18 +372,7 @@ describe('<Tabs />', () => {
 
   describe('<Popover />', () => {
     it('renders a Popover with preferredPosition below when there are hiddenTabs', () => {
-      const mockTabs = [
-        {content: 'Tab 1', id: 'tab-1'},
-        {content: 'Tab 2', id: 'tab-2'},
-        {content: 'Tab 3', id: 'tab-3'},
-        {content: 'Tab 4', id: 'tab-4'},
-        {content: 'Tab 5', id: 'tab-5'},
-        {content: 'Tab 6', id: 'tab-6'},
-      ];
-
-      const tabs = mountWithAppProvider(
-        <Tabs selected={0} tabs={mockTabs} onSelect={noop} />,
-      );
+      const tabs = mountWithAppProvider(<Tabs {...mockProps} />);
       tabs.setState({
         tabWidths: [82, 160, 150, 100, 80, 120],
         containerWidth: 300,
@@ -394,19 +383,8 @@ describe('<Tabs />', () => {
       expect(popover.prop('preferredPosition')).toBe('below');
     });
 
-    it('renders a Popover with a button as the activator when there are hiddenTabs', () => {
-      const mockTabs = [
-        {content: 'Tab 1', id: 'tab-1'},
-        {content: 'Tab 2', id: 'tab-2'},
-        {content: 'Tab 3', id: 'tab-3'},
-        {content: 'Tab 4', id: 'tab-4'},
-        {content: 'Tab 5', id: 'tab-5'},
-        {content: 'Tab 6', id: 'tab-6'},
-      ];
-
-      const tabs = mountWithAppProvider(
-        <Tabs selected={0} tabs={mockTabs} onSelect={noop} />,
-      );
+    it('renders with a button as the activator when there are hiddenTabs', () => {
+      const tabs = mountWithAppProvider(<Tabs {...mockProps} />);
       tabs.setState({
         tabWidths: [82, 160, 150, 100, 80, 120],
         containerWidth: 300,
@@ -417,29 +395,20 @@ describe('<Tabs />', () => {
     });
 
     describe('ArrowRight', () => {
-      xit('shifts focus to the last tab when pressing ArrowRight', () => {
-        const mockTabs = [
-          {content: 'Tab 1', id: 'tab-1'},
-          {content: 'Tab 2', id: 'tab-2'},
-          {content: 'Tab 3', id: 'tab-3'},
-          {content: 'Tab 4', id: 'tab-4'},
-          {content: 'Tab 5', id: 'tab-5'},
-          {content: 'Tab 6', id: 'tab-6'},
-        ];
-
-        const tabs = mountWithAppProvider(
-          <Tabs selected={0} tabs={mockTabs} onSelect={noop} />,
-        );
+      it('shifts focus to the first tab when pressing ArrowRight', () => {
+        const tabs = mountWithAppProvider(<Tabs {...mockProps} />);
         tabs.setState({
           tabWidths: [82, 160, 150, 100, 80, 120],
           containerWidth: 300,
         });
 
         const popoverContents = getPopoverContents(tabs);
-        trigger(popoverContents.find(List), 'onKeyPress', {
-          key: 'ArrowRight',
-        });
-        expect(tabs.find(TabMeasurer).prop('tabToFocus')).toBe(0);
+        async () => {
+          trigger(popoverContents.find(List), 'onKeyPress', {
+            key: 'ArrowRight',
+          });
+          await expect(tabs.find(TabMeasurer).prop('tabToFocus')).toBe(0);
+        };
       });
     });
   });
