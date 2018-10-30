@@ -88,6 +88,9 @@ export class Frame extends React.PureComponent<CombinedProps, State> {
 
   componentDidMount() {
     this.handleResize();
+    if (!this.props.globalRibbon) {
+      this.setGlobalRibbonRootProperty();
+    }
   }
 
   componentDidUpdate(prevProps: Props) {
@@ -267,24 +270,25 @@ export class Frame extends React.PureComponent<CombinedProps, State> {
 
   @autobind
   private setGlobalRibbonHeight() {
-    const setGlobalRibbonRootProperty = () => {
-      const {globalRibbonHeight} = this.state;
-      setRootProperty(
-        GLOBAL_RIBBON_CUSTOM_PROPERTY,
-        `${globalRibbonHeight}px`,
-        null,
-      );
-    };
-
     const {globalRibbonContainer} = this;
     if (globalRibbonContainer) {
       this.setState(
         {
           globalRibbonHeight: globalRibbonContainer.offsetHeight,
         },
-        setGlobalRibbonRootProperty,
+        this.setGlobalRibbonRootProperty,
       );
     }
+  }
+
+  @autobind
+  private setGlobalRibbonRootProperty() {
+    const {globalRibbonHeight} = this.state;
+    setRootProperty(
+      GLOBAL_RIBBON_CUSTOM_PROPERTY,
+      `${globalRibbonHeight}px`,
+      null,
+    );
   }
 
   @autobind
